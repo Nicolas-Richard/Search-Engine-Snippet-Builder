@@ -24,6 +24,8 @@ All the modules are **PyLint** compliant.
 The script named ‘script_that_prints_an_example.py’ will allow you to run your
 own examples easily.
 
+# Understand the code
+
 
 ## About selecting fragments to be snippets
 
@@ -36,7 +38,6 @@ documents for scoring.
 
 This way I'm exhaustively considering all possibly relevant snippets.
 
-# Understand the code
 
 ## About the scoring of snippets #
 
