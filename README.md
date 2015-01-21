@@ -1,23 +1,31 @@
-# Test environment
+# What is this code doing ?
+
+This package is meant to help you build search engine results snippets that are as relevant as possible to the document and the search query. It also highlights the query words in the snippets.
+
+If you need more options, check out this library : https://pypi.python.org/pypi/Whoosh/
+
+# Run the code
+
+## Test environment
 
 This package has been tested in a virtual environement (virtualenv) on Python
 2.7. Required libraries are specified in requirements.txt They can be installed
 with the command ‘pip install -r requirements.txt’
 
-Tests have been run with Nosetests. You can run them from the directory above
+**Tests** have been run with Nosetests. You can run them from the directory above
 ‘tests’ with the command ‘nosetests’.
 
-All the modules are PyLint compliant.
+All the modules are **PyLint** compliant.
 
 
 
-# The example script
+## The example script
 
 The script named ‘script_that_prints_an_example.py’ will allow you to run your
 own examples easily.
 
 
-# About selecting fragments to be snippets
+## About selecting fragments to be snippets
 
 When a keyword is identified in the document, I'm building 3 fragments of the 
 documents for scoring. 
@@ -28,13 +36,14 @@ documents for scoring.
 
 This way I'm exhaustively considering all possibly relevant snippets.
 
+# Understand the code
 
-
-# About the scoring of snippets #
+## About the scoring of snippets #
 
 This is the docstring from the scorer module :
 
-'''The scorer computes a relevance score for each fragment given by the
+```
+The scorer computes a relevance score for each fragment given by the
 fragmenter and picks the fragment with the highest score
 
     The score is computed this way :
@@ -57,12 +66,12 @@ fragmenter and picks the fragment with the highest score
 
         Therefore we can expect the fragment with the higher score to have a
         high number of keywords as well as a variety of them.        
-
+```
 
 This is the thought process that led me to make this choice.
 
 At first I wanted to do TF-IDF scoring which is very efficient for retrieving
-relevant document in a large archive. (en.wikipedia.org/wiki/Tf–idf)
+relevant document in a large archive. (http://en.wikipedia.org/wiki/Tf–idf)
 
 In this case the documents would have been the fragments and the archive the
 document. But the parallel breaks because the words in the query are there in
@@ -85,7 +94,7 @@ word by it’s collection frequency in the document.
 
 
 
-# About the running time #
+## About the running time
 
 Length of document: n words 
 Length of query: m words
@@ -96,12 +105,12 @@ keywords)
 I’m analyzing the complexities in the context of the highlight_doc function.
 
 
-## The tokenizer will run in O(n + m) 
+#### The tokenizer will run in O(n + m) 
 
 Because we tokenize both the document and the query.
 
 
-## The fragmenter will run in expected : O(nm) + O(nf)
+#### The fragmenter will run in expected : O(nm) + O(nf)
 
 First loop: O(nmk) in the worst case. Expected O(nm) For each token in the query
 and in the document we make a comparison. In the expected case the query word is
@@ -115,7 +124,7 @@ fragment we must go through the document.
 expected : O(n(m+f)) worst : O(n(mk+f))
 
 
-## The scorer will run in expected O(fm)
+#### The scorer will run in expected O(fm)
 
 For each fragment we need ot go through each word in the query : O(fm). We have
 to do that many comparisons, most of them will be resolved in O(1) and only few
@@ -126,14 +135,14 @@ O(n).
 expected: O(fmn) worst: O(fmkn)
 
 
-## The formatter will run in O(m)
+#### The formatter will run in O(m)
 
 For each token representing the best fragment, there is only a limited number
 of them O(1) we check if they appear in the query O(m) and perform a few 
 constant time operations accordingly.
 
 
-## The function as whole is expected to run in O(nm)
+#### The function as whole is expected to run in O(nm)
 
 The worst case scenario is encoutered with a document and a query that matches
 it's every word. In that case the fragmenter which would be O(n^2) will
